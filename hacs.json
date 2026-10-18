@@ -1,6 +1,6 @@
 {
-    "name": "Energy Sankey Card",
+    "name": "Balcaskie Sankey Power Flow Card",
     "render_readme": true,
-    "filename": "energy-sankey.js",
+    "filename": "balcaskie-sankey.js",
     "content_in_root": false
 }

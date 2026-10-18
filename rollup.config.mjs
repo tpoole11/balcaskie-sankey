@@ -45,7 +45,7 @@ const plugins = [
 export default {
   input: "src/energy-sankey.ts",
   output: {
-    dir: "dist",
+    file: "dist/balcaskie-sankey.js",
     format: "es",
     inlineDynamicImports: true,
   },
