@@ -1754,7 +1754,7 @@ export class ElecSankey extends LitElement {
     if (this._clUntrackedRate > 0) {
       routes[CL_UNTRACKED_ID] = {
         id: CL_UNTRACKED_ID,
-        text: this.untrackedName ?? this._localize("untracked", "Untracked"),
+        text: this.otherName ?? this._localize("other", "Other"),
         rate: this._clUntrackedRate,
       };
     }
@@ -2314,7 +2314,10 @@ export class ElecSankey extends LitElement {
     );
     ymax += clHeight;
     const arrowBoxWidth = ARROW_HEAD_LENGTH + this._getExtrasLength();
-    return html`<div class="card-content">
+    return html`<div
+      class="card-content"
+      style="min-height: ${60 + ymax * svgScaleX + CONSUMER_LABEL_HEIGHT}px"
+    >
       <div class="col1 container">
         <div class="col1top padding"></div>
         ${gridInDiv} ${clLeftDiv}

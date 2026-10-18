@@ -1,4 +1,4 @@
-var version = "1.0.0-1-gf424065*";
+var version = "1.0.0-2-g8a6ada4*";
 var repository = {
 	url: "https://github.com/tpoole11/balcaskie-sankey"
 };
@@ -4142,7 +4142,7 @@ let ElecSankey = class ElecSankey extends s$1 {
         if (this._clUntrackedRate > 0) {
             routes[CL_UNTRACKED_ID] = {
                 id: CL_UNTRACKED_ID,
-                text: (_a = this.untrackedName) !== null && _a !== void 0 ? _a : this._localize("untracked", "Untracked"),
+                text: (_a = this.otherName) !== null && _a !== void 0 ? _a : this._localize("other", "Other"),
                 rate: this._clUntrackedRate,
             };
         }
@@ -4378,7 +4378,10 @@ let ElecSankey = class ElecSankey extends s$1 {
         const [clLeftDiv, clLeftSvg, clMidSvg, clRightSvgs, clFarRightSvgs, clConsDivs, clHeight,] = this._renderClBranch(ymax, svgCanvasWidth, svgScaleX, consOutFlowsDiv.length);
         ymax += clHeight;
         const arrowBoxWidth = ARROW_HEAD_LENGTH + this._getExtrasLength();
-        return x `<div class="card-content">
+        return x `<div
+      class="card-content"
+      style="min-height: ${60 + ymax * svgScaleX + CONSUMER_LABEL_HEIGHT}px"
+    >
       <div class="col1 container">
         <div class="col1top padding"></div>
         ${gridInDiv} ${clLeftDiv}
