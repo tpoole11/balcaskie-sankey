@@ -1,4 +1,4 @@
-var version = "";
+var version = "1.0.0-1-gf424065*";
 var repository = {
 	url: "https://github.com/tpoole11/balcaskie-sankey"
 };
@@ -4106,7 +4106,7 @@ let ElecSankey = class ElecSankey extends s$1 {
      * row below the main diagram. Returns [leftLabelDiv, leftSvg, midSvg,
      * rightSvg, farRightSvg, consumerLabelDivs, heightUsed].
      */
-    _renderClBranch(yTop, svgCanvasWidth, svgScaleX) {
+    _renderClBranch(yTop, svgCanvasWidth, svgScaleX, labelIndexStart = 0) {
         var _a;
         if (!this.clRoute || !this.clActive || this.clRoute.rate <= 0) {
             return [A, A, A, [], [], [], 0];
@@ -4119,10 +4119,11 @@ let ElecSankey = class ElecSankey extends s$1 {
         // Left: source terminator + arrow, same idiom as grid-in.
         const divHeight = ICON_SIZE_PX + TEXT_PADDING + FONT_SIZE_PX * 2;
         const midY = (y1 + y4) / 2;
+        // col1top is a 60px spacer above the svg; position absolutely from there.
         const leftDiv = x `<div
       class="label elecroute-label-grid elecroute-label-cl"
-      style="left: 0px; height:${divHeight}px;
-      top: ${midY * svgScaleX}px; margin: ${-divHeight / 2}px 0 0 0px;"
+      style="height:${divHeight}px;
+      top: ${60 + midY * svgScaleX - divHeight / 2}px;"
     >
       ${this._generateLabelDiv(this.clRoute.id, this.clRoute.icon || mdiFlashOutline, this.clRoute.text, this.clRoute.rate)}
     </div>`;
@@ -4157,7 +4158,7 @@ let ElecSankey = class ElecSankey extends s$1 {
         const flows = [];
         const extras = [];
         const arrows = [];
-        let i = 0;
+        let i = labelIndexStart;
         for (const key in routes) {
             if (Object.prototype.hasOwnProperty.call(routes, key)) {
                 const [d, f, e, a, yl, yr] = this._renderConsumerFlow(0, yLeft, 100, yRight, routes[key], color, svgScaleX, i++);
@@ -4169,7 +4170,7 @@ let ElecSankey = class ElecSankey extends s$1 {
                 yRight = yr + gap;
             }
         }
-        const bottom = Math.max(y4, yRight - gap) + CONSUMER_LABEL_HEIGHT / 2;
+        const bottom = Math.max(y4, yRight - gap) + CONSUMER_LABEL_HEIGHT / 2 + CL_ROW_GAP / 2;
         return [
             leftDiv,
             leftSvg,
@@ -4374,7 +4375,7 @@ let ElecSankey = class ElecSankey extends s$1 {
         const battToConsBlendFlowSvg = this.renderBatteriesToConsumersBlendFlow(y5, y4, toConsumersBlendColor);
         const blendedFlowPreFanOut = this._renderBlendedFlowPreFanOut(y1, y4, toConsumersBlendColor);
         let ymax = Math.max(y4, y8, y22 + 30);
-        const [clLeftDiv, clLeftSvg, clMidSvg, clRightSvgs, clFarRightSvgs, clConsDivs, clHeight,] = this._renderClBranch(ymax, svgCanvasWidth, svgScaleX);
+        const [clLeftDiv, clLeftSvg, clMidSvg, clRightSvgs, clFarRightSvgs, clConsDivs, clHeight,] = this._renderClBranch(ymax, svgCanvasWidth, svgScaleX, consOutFlowsDiv.length);
         ymax += clHeight;
         const arrowBoxWidth = ARROW_HEAD_LENGTH + this._getExtrasLength();
         return x `<div class="card-content">
@@ -4457,6 +4458,12 @@ let ElecSankey = class ElecSankey extends s$1 {
         flex: 1;
         min-width: 60px;
         max-width: 120px;
+        position: relative;
+      }
+      .elecroute-label-cl {
+        position: absolute;
+        left: 0;
+        width: 100%;
       }
       .col1top {
         height: 60px;

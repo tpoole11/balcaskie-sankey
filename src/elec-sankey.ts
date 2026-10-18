@@ -1700,7 +1700,8 @@ export class ElecSankey extends LitElement {
   protected _renderClBranch(
     yTop: number,
     svgCanvasWidth: number,
-    svgScaleX: number
+    svgScaleX: number,
+    labelIndexStart: number = 0
   ): [
     TemplateResult | symbol,
     TemplateResult | symbol,
@@ -1722,10 +1723,11 @@ export class ElecSankey extends LitElement {
     // Left: source terminator + arrow, same idiom as grid-in.
     const divHeight = ICON_SIZE_PX + TEXT_PADDING + FONT_SIZE_PX * 2;
     const midY = (y1 + y4) / 2;
+    // col1top is a 60px spacer above the svg; position absolutely from there.
     const leftDiv = html`<div
       class="label elecroute-label-grid elecroute-label-cl"
-      style="left: 0px; height:${divHeight}px;
-      top: ${midY * svgScaleX}px; margin: ${-divHeight / 2}px 0 0 0px;"
+      style="height:${divHeight}px;
+      top: ${60 + midY * svgScaleX - divHeight / 2}px;"
     >
       ${this._generateLabelDiv(
         this.clRoute.id,
@@ -1768,7 +1770,7 @@ export class ElecSankey extends LitElement {
     const flows: TemplateResult[] = [];
     const extras: TemplateResult[] = [];
     const arrows: TemplateResult[] = [];
-    let i = 0;
+    let i = labelIndexStart;
     for (const key in routes) {
       if (Object.prototype.hasOwnProperty.call(routes, key)) {
         const [d, f, e, a, yl, yr] = this._renderConsumerFlow(
@@ -1789,7 +1791,8 @@ export class ElecSankey extends LitElement {
         yRight = yr + gap;
       }
     }
-    const bottom = Math.max(y4, yRight - gap) + CONSUMER_LABEL_HEIGHT / 2;
+    const bottom =
+      Math.max(y4, yRight - gap) + CONSUMER_LABEL_HEIGHT / 2 + CL_ROW_GAP / 2;
     return [
       leftDiv,
       leftSvg,
@@ -2303,7 +2306,12 @@ export class ElecSankey extends LitElement {
       clFarRightSvgs,
       clConsDivs,
       clHeight,
-    ] = this._renderClBranch(ymax, svgCanvasWidth, svgScaleX);
+    ] = this._renderClBranch(
+      ymax,
+      svgCanvasWidth,
+      svgScaleX,
+      consOutFlowsDiv.length
+    );
     ymax += clHeight;
     const arrowBoxWidth = ARROW_HEAD_LENGTH + this._getExtrasLength();
     return html`<div class="card-content">
@@ -2387,6 +2395,12 @@ export class ElecSankey extends LitElement {
         flex: 1;
         min-width: 60px;
         max-width: 120px;
+        position: relative;
+      }
+      .elecroute-label-cl {
+        position: absolute;
+        left: 0;
+        width: 100%;
       }
       .col1top {
         height: 60px;
