@@ -1607,7 +1607,12 @@ export class ElecSankey extends LitElement {
     }
     // Re-sort the consumer routes - deleting can break the order (issue #128).
     consumerRoutes = sortRoutesByRateDescending(consumerRoutes);
-    if (groupedConsumerExists) {
+    // Balcaskie fork: only draw the grouped "Other" branch when it carries
+    // something worth seeing. An "Other 0 W" line is noise.
+    if (
+      groupedConsumerExists &&
+      groupedConsumer.rate >= Math.max(this.hideConsumersBelow, 1)
+    ) {
       consumerRoutes[groupedConsumer.id!] = groupedConsumer;
     }
     return consumerRoutes;

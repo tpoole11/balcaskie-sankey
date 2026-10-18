@@ -1,4 +1,4 @@
-var version = "1.0.0-4-g930072b*";
+var version = "1.0.0-5-g55756be*";
 var repository = {
 	url: "https://github.com/tpoole11/balcaskie-sankey"
 };
@@ -4050,7 +4050,10 @@ let ElecSankey = class ElecSankey extends s$1 {
         }
         // Re-sort the consumer routes - deleting can break the order (issue #128).
         consumerRoutes = sortRoutesByRateDescending(consumerRoutes);
-        if (groupedConsumerExists) {
+        // Balcaskie fork: only draw the grouped "Other" branch when it carries
+        // something worth seeing. An "Other 0 W" line is noise.
+        if (groupedConsumerExists &&
+            groupedConsumer.rate >= Math.max(this.hideConsumersBelow, 1)) {
             consumerRoutes[groupedConsumer.id] = groupedConsumer;
         }
         return consumerRoutes;
