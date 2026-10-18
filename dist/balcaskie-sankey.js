@@ -1,4 +1,4 @@
-var version = "1.0.0-3-g8bd545a*";
+var version = "1.0.0-4-g930072b*";
 var repository = {
 	url: "https://github.com/tpoole11/balcaskie-sankey"
 };
@@ -4378,8 +4378,15 @@ let ElecSankey = class ElecSankey extends s$1 {
         const battToConsBlendFlowSvg = this.renderBatteriesToConsumersBlendFlow(y5, y4, toConsumersBlendColor);
         const blendedFlowPreFanOut = this._renderBlendedFlowPreFanOut(y1, y4, toConsumersBlendColor);
         let ymax = Math.max(y4, y8, y22 + 30);
-        const [clLeftDiv, clLeftSvg, clMidSvg, clRightSvgs, clFarRightSvgs, clConsDivs, clHeight,] = this._renderClBranch(ymax, svgCanvasWidth, svgScaleX, consOutFlowsDiv.length);
-        ymax += clHeight;
+        // Balcaskie fork: the battery label (icon + two lines) extends below y22
+        // by about its own height in px; convert to svg units so the CL row
+        // clears it. Also clear the lowest consumer label in col3.
+        const battLabelPx = ICON_SIZE_PX + TEXT_PADDING + FONT_SIZE_PX * 2;
+        const clTop = Math.max(ymax, y22 + battLabelPx / svgScaleX + 10);
+        const [clLeftDiv, clLeftSvg, clMidSvg, clRightSvgs, clFarRightSvgs, clConsDivs, clHeight,] = this._renderClBranch(clTop, svgCanvasWidth, svgScaleX, consOutFlowsDiv.length);
+        if (clHeight > 0) {
+            ymax = clTop + clHeight;
+        }
         const arrowBoxWidth = ARROW_HEAD_LENGTH + this._getExtrasLength();
         return x `<div
       class="card-content"

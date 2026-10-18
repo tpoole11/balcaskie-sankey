@@ -2302,6 +2302,11 @@ export class ElecSankey extends LitElement {
       toConsumersBlendColor
     );
     let ymax = Math.max(y4, y8, y22 + 30);
+    // Balcaskie fork: the battery label (icon + two lines) extends below y22
+    // by about its own height in px; convert to svg units so the CL row
+    // clears it. Also clear the lowest consumer label in col3.
+    const battLabelPx = ICON_SIZE_PX + TEXT_PADDING + FONT_SIZE_PX * 2;
+    const clTop = Math.max(ymax, y22 + battLabelPx / svgScaleX + 10);
     const [
       clLeftDiv,
       clLeftSvg,
@@ -2311,12 +2316,14 @@ export class ElecSankey extends LitElement {
       clConsDivs,
       clHeight,
     ] = this._renderClBranch(
-      ymax,
+      clTop,
       svgCanvasWidth,
       svgScaleX,
       consOutFlowsDiv.length
     );
-    ymax += clHeight;
+    if (clHeight > 0) {
+      ymax = clTop + clHeight;
+    }
     const arrowBoxWidth = ARROW_HEAD_LENGTH + this._getExtrasLength();
     return html`<div
       class="card-content"
