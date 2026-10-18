@@ -1723,11 +1723,15 @@ export class ElecSankey extends LitElement {
     // Left: source terminator + arrow, same idiom as grid-in.
     const divHeight = ICON_SIZE_PX + TEXT_PADDING + FONT_SIZE_PX * 2;
     const midY = (y1 + y4) / 2;
-    // col1top is a 60px spacer above the svg; position absolutely from there.
+    // Same flow-child idiom as the grid label: offset by the labels already
+    // stacked above in col1 (the grid label, when present).
+    const priorLabels =
+      this.gridInRoute || this.gridOutRoute || this._phantomGridInRoute ? 1 : 0;
     const leftDiv = html`<div
       class="label elecroute-label-grid elecroute-label-cl"
       style="height:${divHeight}px;
-      top: ${60 + midY * svgScaleX - divHeight / 2}px;"
+      top: ${midY * svgScaleX - priorLabels * divHeight}px;
+      margin: ${-divHeight / 2}px 0 0 0;"
     >
       ${this._generateLabelDiv(
         this.clRoute.id,
@@ -2401,8 +2405,6 @@ export class ElecSankey extends LitElement {
         position: relative;
       }
       .elecroute-label-cl {
-        position: absolute;
-        left: 0;
         width: 100%;
       }
       .col1top {

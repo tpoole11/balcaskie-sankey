@@ -1,4 +1,4 @@
-var version = "1.0.0-2-g8a6ada4*";
+var version = "1.0.0-3-g8bd545a*";
 var repository = {
 	url: "https://github.com/tpoole11/balcaskie-sankey"
 };
@@ -4119,11 +4119,14 @@ let ElecSankey = class ElecSankey extends s$1 {
         // Left: source terminator + arrow, same idiom as grid-in.
         const divHeight = ICON_SIZE_PX + TEXT_PADDING + FONT_SIZE_PX * 2;
         const midY = (y1 + y4) / 2;
-        // col1top is a 60px spacer above the svg; position absolutely from there.
+        // Same flow-child idiom as the grid label: offset by the labels already
+        // stacked above in col1 (the grid label, when present).
+        const priorLabels = this.gridInRoute || this.gridOutRoute || this._phantomGridInRoute ? 1 : 0;
         const leftDiv = x `<div
       class="label elecroute-label-grid elecroute-label-cl"
       style="height:${divHeight}px;
-      top: ${60 + midY * svgScaleX - divHeight / 2}px;"
+      top: ${midY * svgScaleX - priorLabels * divHeight}px;
+      margin: ${-divHeight / 2}px 0 0 0;"
     >
       ${this._generateLabelDiv(this.clRoute.id, this.clRoute.icon || mdiFlashOutline, this.clRoute.text, this.clRoute.rate)}
     </div>`;
@@ -4464,8 +4467,6 @@ let ElecSankey = class ElecSankey extends s$1 {
         position: relative;
       }
       .elecroute-label-cl {
-        position: absolute;
-        left: 0;
         width: 100%;
       }
       .col1top {
