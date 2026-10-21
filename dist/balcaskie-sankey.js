@@ -1,4 +1,4 @@
-var version = "1.0.0-8-g392541e*";
+var version = "1.0.0-9-ge53f70d*";
 var repository = {
 	url: "https://github.com/tpoole11/balcaskie-sankey"
 };
@@ -4154,7 +4154,16 @@ let ElecSankey = class ElecSankey extends s$1 {
         style="fill:${color}" />
     `;
         // Right: consumers, same renderer as the main fan-out.
-        let routes = sortRoutesByRateDescending(this.clConsumerRoutes);
+        // Only draw CL consumers that are actually drawing; an idle pool on a
+        // live CL row is noise, same rule as the "Other" branch.
+        const activeCl = {};
+        for (const key in this.clConsumerRoutes) {
+            const r = this.clConsumerRoutes[key];
+            if ((r.rate || 0) >= Math.max(this.hideConsumersBelow, 1)) {
+                activeCl[key] = r;
+            }
+        }
+        let routes = sortRoutesByRateDescending(activeCl);
         if (this._clUntrackedRate > 0) {
             routes[CL_UNTRACKED_ID] = {
                 id: CL_UNTRACKED_ID,

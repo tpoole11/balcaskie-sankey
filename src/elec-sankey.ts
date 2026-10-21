@@ -1757,9 +1757,17 @@ export class ElecSankey extends LitElement {
     `;
 
     // Right: consumers, same renderer as the main fan-out.
-    let routes: { [id: string]: ElecRoute } = sortRoutesByRateDescending(
-      this.clConsumerRoutes
-    );
+    // Only draw CL consumers that are actually drawing; an idle pool on a
+    // live CL row is noise, same rule as the "Other" branch.
+    const activeCl: { [id: string]: ElecRoute } = {};
+    for (const key in this.clConsumerRoutes) {
+      const r = this.clConsumerRoutes[key];
+      if ((r.rate || 0) >= Math.max(this.hideConsumersBelow, 1)) {
+        activeCl[key] = r;
+      }
+    }
+    let routes: { [id: string]: ElecRoute } =
+      sortRoutesByRateDescending(activeCl);
     if (this._clUntrackedRate > 0) {
       routes[CL_UNTRACKED_ID] = {
         id: CL_UNTRACKED_ID,
