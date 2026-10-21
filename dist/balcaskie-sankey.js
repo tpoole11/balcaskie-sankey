@@ -1,4 +1,4 @@
-var version = "1.0.0-7-gdb8008f*";
+var version = "1.0.0-8-g392541e*";
 var repository = {
 	url: "https://github.com/tpoole11/balcaskie-sankey"
 };
@@ -2368,10 +2368,12 @@ let PowerFlowCard = class PowerFlowCard extends ElecFlowCardBase {
 };
 PowerFlowCard.styles = [
     i$3 `
+      :host {
+        display: block;
+      }
       ha-card {
-        /* Balcaskie fork: min-height not height, so the card can grow when
-           the controlled-load row appears instead of clipping it. */
-        min-height: 100%;
+        /* Balcaskie fork: content-sized, so the card grows when the
+           controlled-load row appears instead of clipping it. */
         height: auto;
         align-items: center;
         justify-content: center;

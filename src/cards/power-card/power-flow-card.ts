@@ -632,10 +632,12 @@ export class PowerFlowCard extends ElecFlowCardBase implements LovelaceCard {
 
   static styles: CSSResultArray = [
     css`
+      :host {
+        display: block;
+      }
       ha-card {
-        /* Balcaskie fork: min-height not height, so the card can grow when
-           the controlled-load row appears instead of clipping it. */
-        min-height: 100%;
+        /* Balcaskie fork: content-sized, so the card grows when the
+           controlled-load row appears instead of clipping it. */
         height: auto;
         align-items: center;
         justify-content: center;
