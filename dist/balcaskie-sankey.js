@@ -1,4 +1,4 @@
-var version = "1.0.0-6-g8318dc0*";
+var version = "1.0.0-7-gdb8008f*";
 var repository = {
 	url: "https://github.com/tpoole11/balcaskie-sankey"
 };
@@ -2380,6 +2380,7 @@ PowerFlowCard.styles = [
         padding-bottom: 16px;
       }
       balcaskie-ha-elec-sankey {
+        display: block;
         --generation-color: var(--energy-solar-color);
         --grid-in-color: var(--energy-grid-consumption-color);
         --batt-in-color: var(--energy-battery-out-color);

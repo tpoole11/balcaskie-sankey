@@ -644,6 +644,7 @@ export class PowerFlowCard extends ElecFlowCardBase implements LovelaceCard {
         padding-bottom: 16px;
       }
       balcaskie-ha-elec-sankey {
+        display: block;
         --generation-color: var(--energy-solar-color);
         --grid-in-color: var(--energy-grid-consumption-color);
         --batt-in-color: var(--energy-battery-out-color);
