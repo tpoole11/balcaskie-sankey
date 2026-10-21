@@ -1,4 +1,4 @@
-var version = "1.0.0-5-g55756be*";
+var version = "1.0.0-6-g8318dc0*";
 var repository = {
 	url: "https://github.com/tpoole11/balcaskie-sankey"
 };
@@ -1976,6 +1976,10 @@ let PowerFlowCard = class PowerFlowCard extends ElecFlowCardBase {
     getCardSize() {
         return 3;
     }
+    /** Sections view: let the card take its natural height. */
+    getGridOptions() {
+        return { columns: "full", rows: "auto" };
+    }
     setConfig(config) {
         const newConfig = verifyAndMigrateConfig(config);
         this._config = Object.assign({}, newConfig);
@@ -2365,7 +2369,10 @@ let PowerFlowCard = class PowerFlowCard extends ElecFlowCardBase {
 PowerFlowCard.styles = [
     i$3 `
       ha-card {
-        height: 100%;
+        /* Balcaskie fork: min-height not height, so the card can grow when
+           the controlled-load row appears instead of clipping it. */
+        min-height: 100%;
+        height: auto;
         align-items: center;
         justify-content: center;
         flex-direction: column;
@@ -4393,7 +4400,8 @@ let ElecSankey = class ElecSankey extends s$1 {
         const arrowBoxWidth = ARROW_HEAD_LENGTH + this._getExtrasLength();
         return x `<div
       class="card-content"
-      style="min-height: ${60 + ymax * svgScaleX + CONSUMER_LABEL_HEIGHT}px"
+      style="min-height: ${60 + ymax * svgScaleX + CONSUMER_LABEL_HEIGHT}px;
+        height: ${60 + ymax * svgScaleX + CONSUMER_LABEL_HEIGHT}px;"
     >
       <div class="col1 container">
         <div class="col1top padding"></div>

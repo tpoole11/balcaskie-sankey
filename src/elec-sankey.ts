@@ -2332,7 +2332,8 @@ export class ElecSankey extends LitElement {
     const arrowBoxWidth = ARROW_HEAD_LENGTH + this._getExtrasLength();
     return html`<div
       class="card-content"
-      style="min-height: ${60 + ymax * svgScaleX + CONSUMER_LABEL_HEIGHT}px"
+      style="min-height: ${60 + ymax * svgScaleX + CONSUMER_LABEL_HEIGHT}px;
+        height: ${60 + ymax * svgScaleX + CONSUMER_LABEL_HEIGHT}px;"
     >
       <div class="col1 container">
         <div class="col1top padding"></div>

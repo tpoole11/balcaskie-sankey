@@ -151,6 +151,11 @@ export class PowerFlowCard extends ElecFlowCardBase implements LovelaceCard {
     return 3;
   }
 
+  /** Sections view: let the card take its natural height. */
+  public getGridOptions() {
+    return { columns: "full", rows: "auto" };
+  }
+
   public setConfig(config: PowerFlowCardConfig): void {
     const newConfig = verifyAndMigrateConfig(config);
     this._config = { ...newConfig };
@@ -628,7 +633,10 @@ export class PowerFlowCard extends ElecFlowCardBase implements LovelaceCard {
   static styles: CSSResultArray = [
     css`
       ha-card {
-        height: 100%;
+        /* Balcaskie fork: min-height not height, so the card can grow when
+           the controlled-load row appears instead of clipping it. */
+        min-height: 100%;
+        height: auto;
         align-items: center;
         justify-content: center;
         flex-direction: column;
